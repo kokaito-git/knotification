@@ -1,3 +1,5 @@
+`pip install knotification`
+
 This library is designed to easily implement notifications with images and
 sounds in your Python scripts.
 
