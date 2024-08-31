@@ -73,14 +73,14 @@ class KNotification:
         *,
         default_title: Optional[str] = None,
         default_duration: Number = 10,
-        default_image: Optional[str] = None,
+        default_image: Optional[PathStr] = None,
         default_async_play: bool = False,
         default_sound: Optional[Union[KNotifySound, PathStr]] = None,
     ):
         # defaults
         self._default_title = default_title
         self._default_duration = default_duration
-        self._default_image = default_image
+        self._default_image = self._convert_image_path(default_image)
         self._default_sound = None  # required before first read
         self._default_sound = self._read_sound_parameter(default_sound)
         self._default_image = default_image
@@ -90,10 +90,31 @@ class KNotification:
         self._client = NotificationClient()
         self._client.register_backend(platform.Backend())
 
-    def _read_sound_parameter(self, sound: Optional[Union[KNotifySound, PathStr]]):
-        if sound is None:
-            return self._default_sound
-        return KNotifySound(sound)
+    def send(
+        self,
+        msg: Optional[str] = None,
+        title: Optional[str] = None,
+        duration: Optional[Number] = None,
+        image: Optional[PathStr] = None,
+        async_play: Optional[bool] = None,
+        sound: Optional[Union[KNotifySound, PathStr]] = None,
+    ):
+        title, msg, duration, image, async_play, sound = self._set_notify_defaults(
+            title, msg, duration, image, async_play, sound
+        )
+
+        notification = Notification(
+            title=title,
+            message=msg,
+            icon_path=image,
+            duration=duration,
+        )
+
+        self._client.notify_all(notification)
+
+        sound = self._read_sound_parameter(sound)
+        if sound is not None:  # default_sound can also be None
+            sound.play(async_play)
 
     @property
     def default_title(self):
@@ -127,38 +148,27 @@ class KNotification:
     def default_async_play(self, value):
         self._default_async_play = value
 
-    def send(
-        self,
-        msg: Optional[str] = None,
-        title: Optional[str] = None,
-        duration: Optional[Number] = None,
-        image: Optional[str] = None,
-        async_play: Optional[bool] = None,
-        sound: Optional[Union[KNotifySound, PathStr]] = None,
-    ):
-        title, msg, duration, image, async_play, sound = self._set_notify_defaults(
-            title, msg, duration, image, async_play, sound
-        )
+    def _convert_image_path(self, path: Any):
+        try:
+            return str(path)
+        except Exception as e:
+            print(
+                f"default_image debe ser un path o en general, cualquier cosa que pueda"
+                f" ser convertida a str y sea una ubicación real de una imagen. Mensaje"
+                f" de excepción:\n{e}"
+            )
 
-        notification = Notification(
-            title=title,
-            message=msg,
-            icon_path=image,
-            duration=duration,
-        )
-
-        self._client.notify_all(notification)
-
-        sound = self._read_sound_parameter(sound)
-        if sound is not None:  # default_sound can also be None
-            sound.play(async_play)
+    def _read_sound_parameter(self, sound: Optional[Union[KNotifySound, PathStr]]):
+        if sound is None:
+            return self._default_sound
+        return KNotifySound(sound)
 
     def _set_notify_defaults(
         self,
         title: Optional[str],
         msg: Optional[str],
         duration: Optional[Number],
-        image: Optional[str],
+        image: Optional[PathStr],
         async_play: Optional[bool],
         sound: Optional[Union[KNotifySound, str]],
     ):
@@ -166,7 +176,10 @@ class KNotification:
         if title is None:
             title = self._get_app_name()
         msg = msg if msg is not None else ""
-        image = image if image is not None else self._default_image
+        if image is None:
+            image = self._default_image
+        else:
+            image = self._convert_image_path(image)
         duration = duration if duration is not None else self.default_duration
         async_play = async_play if async_play is not None else self.default_async_play
         sound = self._read_sound_parameter(sound)
