@@ -248,6 +248,8 @@ class KNotification:
 
         sound = self._default_sound if sound is None else sound
         if sound is not None:  # default_sound can also be None
+            if volume is not None:
+                sound.set_volume(volume)
             sound.play(async_play)
 
     def _set_notify_defaults(
