@@ -1,5 +1,4 @@
-`pip install knotification`
-
+"""
 This library is designed to easily implement notifications with images and
 sounds in your Python scripts.
 
@@ -14,6 +13,18 @@ Additionally, the design may change.
 - **pygame**: https://github.com/pygame/pygame
 - **libnotify**: https://github.com/GNOME/libnotify
 
+- **Notification Sound** (yfjesse): [Freesound Link](https://freesound.org/people/yfjess
+  e/sounds/235911/) (Creative Commons 0)
+  _I decreased the volume a bit to 0.65._
+
+- **Discrete Error** (distillerystudio): [Freesound Link](https://freesound.org/people/d
+  istillerystudio/sounds/327737/) (Attribution 3.0)  
+  _I decreased the volume a bit to 0.80._
+
+# Sample Sounds
+
+You can use the sample sounds
+
 # Dependencies
 
 ```bash
@@ -27,19 +38,5 @@ ArchLinux: sudo pacman -S libnotify
 Debian : sudo apt-get install libnotify-bin
 
 Usage:
-There are two classes: PygameSound, KNotification
+There are two classes: KNotifySound, KNotification
 ```
-
-# PygameSound
-
-Optionally used to store sounds in variables, preload them, and avoid
-specifying the path to the sound each time you use a different sound than the
-default one set in KNotification (if you choose to set a default sound).
-
-# KNotification
-
-Used to create a notification object where you can set default settings,
-though you can always specify the details of the notification explicitly for
-each dispatch. You can also create different notification objects, for
-example, one for errors and another for informational messages, allowing you
-to define different default details for each.

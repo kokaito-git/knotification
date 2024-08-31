@@ -13,8 +13,11 @@ Additionally, the design may change.
 - **pygame**: https://github.com/pygame/pygame
 - **libnotify**: https://github.com/GNOME/libnotify
 
-- Notification Sound: https://freesound.org/people/yfjesse/sounds/235911/
-    (I decreased the volume a bit)
+- **Notification Sound** (yfjesse): [Freesound Link](https://freesound.org/people/yfjesse/sounds/235911/) (Creative Commons 0)  
+  *I decreased the volume a bit to 0.65.*
+
+- **Discrete Error** (distillerystudio): [Freesound Link](https://freesound.org/people/distillerystudio/sounds/327737/) (Attribution 3.0)  
+  *I decreased the volume a bit to 0.80.*
 
 # Dependencies
 
