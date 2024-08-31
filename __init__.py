@@ -18,17 +18,18 @@ Additionally, the design may change.
 ```bash
 pip install knotification
 
-pip install py-notifier
-pip install pygame
-# Windows
-    pip install WinToaster
+# Installed automatically (dependencies of knotification)
+# pip install py-notifier
+# pip install pygame
+# pip install WinToaster (in windows)
 
-# Linux (no pip, requires manual install)
-ArchLinux: sudo pacman -S libnotify
-Debian : sudo apt-get install libnotify-bin
+# Manual installation required
+# Linux (Arch/Debian)
+sudo pacman -S libnotify
+sudo apt-get install libnotify-bin
 
-Usage:
-There are two classes: KNotifySound, KNotification
+# Other Linux distributions/Mac
+# I'm sorry but I'm still not sure.
 ```
 
 # Sample Usage
