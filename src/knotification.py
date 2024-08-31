@@ -12,8 +12,6 @@ import pygame
 Number = Union[float, int]
 PathStr = Union[str, Any]
 
-PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 
 class KNotifySound:
     """Clase utilizada para evitar la carga de un sonido cada vez que se vaya a

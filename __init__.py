@@ -13,13 +13,7 @@ Additionally, the design may change.
 - **pygame**: https://github.com/pygame/pygame
 - **libnotify**: https://github.com/GNOME/libnotify
 
-- **Notification Sound** (yfjesse): [Freesound Link](https://freesound.org/people/yfjesse/sounds/235911/) (Creative Commons 0)  
-  *I decreased the volume a bit to 0.65.*
-
-- **Discrete Error** (distillerystudio): [Freesound Link](https://freesound.org/people/distillerystudio/sounds/327737/) (Attribution 3.0)  
-  *I decreased the volume a bit to 0.80.*
-
-# Dependencies
+# Install && Dependencies
 
 ```bash
 pip install py-notifier
@@ -35,6 +29,9 @@ Usage:
 There are two classes: KNotifySound, KNotification
 ```
 
+# Sample Usage
+``````
+
 # KNotifySound
 
 Optionally used to store sounds in variables, preload them, and avoid
@@ -47,6 +44,14 @@ Used to create a notification object where you can set default settings,
 though you can always specify the details of the notification explicitly for
 each dispatch. You can also create different notification objects, for
 example, one for errors and another for informational messages, allowing you
-to define different default details for each."""
+to define different default details for each.
 
-from src.knotification import KNotifySound, KNotification
+# More Credits (All License: Creative Commons 0)
+- **Notification Sound** (yfjesse): [Freesound Link](https://freesound.org/people/yfjesse/sounds/235911/)
+- **Error.wav** (Isaac200000): [Freesound Link](https://freesound.org/people/Isaac200000/sounds/188013/)
+- **SeriousError01f.aif** (Kuru23): [Freesound Link](https://freesound.org/people/Kuru23/sounds/145287/)
+- **Notification Image**: https://openverse.org/image/953731c5-25c6-43d5-910c-36f4200d4925?q=information 
+- **Error Image**: https://openverse.org/image/eb77d859-8cf7-45ce-aaf3-00d2067882bc?q=error.png
+"""
+
+from .src.knotification import KNotifySound, KNotification
