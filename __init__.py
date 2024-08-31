@@ -16,6 +16,8 @@ Additionally, the design may change.
 # Install && Dependencies
 
 ```bash
+pip install knotification
+
 pip install py-notifier
 pip install pygame
 # Windows
@@ -30,7 +32,31 @@ There are two classes: KNotifySound, KNotification
 ```
 
 # Sample Usage
-``````
+
+```python
+from knotification import KNotification
+from knotification.sample import (
+    SND_NOTIFY,
+    SND_ERROR,
+    SND_ERROR2,
+    IMG_NOTIFY,
+    IMG_ERROR,
+)
+import time
+
+notify = KNotification(
+    default_title="KNotification",
+    default_sound=SND_NOTIFY,
+    default_image=f"{IMG_NOTIFY}",
+)
+error = KNotification(default_sound=SND_ERROR, default_image=f"{IMG_ERROR}")
+
+notify.send("Thanks for using my software")
+time.sleep(1)
+error.send(f"[!] Error: Not enough resources.\n\nCheck the manual.")
+time.sleep(1)
+error.send(f"[!] Error: Not enough notifies.", duration=20, sound=SND_ERROR2)
+```
 
 # KNotifySound
 
@@ -47,11 +73,12 @@ example, one for errors and another for informational messages, allowing you
 to define different default details for each.
 
 # More Credits (All License: Creative Commons 0)
+
 - **Notification Sound** (yfjesse): [Freesound Link](https://freesound.org/people/yfjesse/sounds/235911/)
 - **Error.wav** (Isaac200000): [Freesound Link](https://freesound.org/people/Isaac200000/sounds/188013/)
 - **SeriousError01f.aif** (Kuru23): [Freesound Link](https://freesound.org/people/Kuru23/sounds/145287/)
-- **Notification Image**: https://openverse.org/image/953731c5-25c6-43d5-910c-36f4200d4925?q=information 
-- **Error Image**: https://openverse.org/image/eb77d859-8cf7-45ce-aaf3-00d2067882bc?q=error.png
+- **Notification Image**: [Openverse](https://openverse.org/image/953731c5-25c6-43d5-910c-36f4200d4925?q=information)
+- **Error Image**: [Openverse](https://openverse.org/image/eb77d859-8cf7-45ce-aaf3-00d2067882bc?q=error.png)
 """
 
 from .src.knotification import KNotifySound, KNotification

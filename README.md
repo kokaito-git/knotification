@@ -15,6 +15,8 @@ Additionally, the design may change.
 # Install && Dependencies
 
 ```bash
+pip install knotification
+
 pip install py-notifier
 pip install pygame
 # Windows
