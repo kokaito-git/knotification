@@ -60,77 +60,52 @@ Number = Union[float, int]
 class PygameSound:
     def __init__(
         self,
-        sound: Optional[Union[str, "PygameSound", pygame.mixer.Sound]] = None,
-        *,
-        volume: float = 1.0,
+        sound: Optional[Union[str, "PygameSound", pygame.mixer.Sound]],
     ):
         """
         Initializes the sound object.
 
         :param sound: Path to the sound file (str), another PygameSound object, or a
             pygame sound object.
-        :param volume: Volume of the sound (from 0.0 to 1.0).
         """
 
         pygame.mixer.init()  # Inicializar el mezclador de pygame
 
         if isinstance(sound, PygameSound):
             self._sound = sound._sound
-            self._volume = sound.get_volume()  # Copiar volumen
         elif isinstance(sound, pygame.mixer.Sound):
             self._sound = sound
-            self._volume = volume
         elif isinstance(sound, str):
             self.file_path = sound
             self._sound = pygame.mixer.Sound(self.file_path)
-            self._volume = volume
         else:
             raise ValueError(
                 "The 'sound' parameter must be a file path (str), a PygameSound object, or a pygame.mixer.Sound object."
             )
 
-        self.set_volume(self._volume)
-
     def setter(
         self,
-        sound: Optional[Union[str, "PygameSound", pygame.mixer.Sound]] = None,
-        *,
-        volume: float = 1.0,
+        sound: Optional[Union[str, "PygameSound", pygame.mixer.Sound]],
     ):
         """
         Configures the sound object after initialization.
 
         :param sound: Path to the sound file (str), another PygameSound object, or a
             pygame sound object.
-        :param volume: Volume of the sound (from 0.0 to 1.0).
         """
         if isinstance(sound, PygameSound):
             self._sound = sound._sound
-            self._volume = sound.get_volume()  # Copiar volumen
         elif isinstance(sound, pygame.mixer.Sound):
             self._sound = sound
-            self._volume = volume
         elif isinstance(sound, str):
             self.file_path = sound
             self._sound = pygame.mixer.Sound(self.file_path)
-            self._volume = volume
         else:
             raise ValueError(
                 "default_sound have to be PygameSound or a str with the file_path but it is {type(default_sound)}"
             )
 
-        self.set_volume(self._volume)
-
-    def set_volume(self, volume: float):
-        if 0.0 <= volume <= 1.0:
-            self._sound.set_volume(volume)
-        else:
-            raise ValueError("Volume must be between 0.0 and 1.0.")
-
-    def get_volume(self) -> float:
-        return self._sound.get_volume()
-
-    def play(self, async_play=True):
+    def play(self, async_play=False):
         def play_sound():
             pygame.mixer.Channel(0).play(self._sound)
             while pygame.mixer.Channel(0).get_busy():
@@ -145,9 +120,6 @@ class PygameSound:
             while pygame.mixer.Channel(0).get_busy():
                 pygame.time.wait(10)  # Esperar a que termine la reproducción
 
-    def stop(self):
-        pygame.mixer.Channel(0).stop()
-
 
 class KNotification:
     def __init__(
@@ -156,7 +128,6 @@ class KNotification:
         default_title: Optional[str] = None,
         default_duration: Number = 10,
         default_image: Optional[str] = None,
-        default_volume: Number = 1,
         default_async_play: bool = False,
         default_sound: Optional[Union[PygameSound, str]] = None,
     ):
@@ -166,7 +137,6 @@ class KNotification:
         self._default_image = default_image
         self._default_sound = self._read_sound_parameter(default_sound)
         self._default_image = default_image
-        self._default_volume = default_volume
         self._default_async_play = default_async_play
 
         # client
@@ -207,14 +177,6 @@ class KNotification:
         self._default_sound = self._read_sound_parameter(value)
 
     @property
-    def default_volume(self):
-        return self._default_volume
-
-    @default_volume.setter
-    def default_volume(self, value):
-        self._default_volume = value
-
-    @property
     def default_async_play(self):
         return self._default_async_play
 
@@ -228,14 +190,11 @@ class KNotification:
         title: Optional[str] = None,
         duration: Optional[Number] = None,
         image: Optional[str] = None,
-        volume: Optional[Number] = None,
         async_play: Optional[bool] = None,
         sound: Optional[Union[PygameSound, str]] = None,
     ):
-        title, msg, duration, image, volume, async_play, sound = (
-            self._set_notify_defaults(
-                title, msg, duration, image, volume, async_play, sound
-            )
+        title, msg, duration, image, async_play, sound = self._set_notify_defaults(
+            title, msg, duration, image, async_play, sound
         )
 
         notification = Notification(
@@ -248,8 +207,6 @@ class KNotification:
 
         sound = self._default_sound if sound is None else sound
         if sound is not None:  # default_sound can also be None
-            if volume is not None:
-                sound.set_volume(volume)
             sound.play(async_play)
 
     def _set_notify_defaults(
@@ -258,7 +215,6 @@ class KNotification:
         msg: Optional[str],
         duration: Optional[Number],
         image: Optional[str],
-        volume: Optional[Number],
         async_play: Optional[bool],
         sound: Optional[Union[PygameSound, str]],
     ):
@@ -268,10 +224,9 @@ class KNotification:
         msg = msg if msg is not None else ""
         image = image if image is not None else self._default_image
         duration = duration if duration is not None else self.default_duration
-        volume = volume if volume is not None else self.default_volume
         async_play = async_play if async_play is not None else self.default_async_play
         sound = self._read_sound_parameter(sound)
-        return title, msg, duration, image, volume, async_play, sound
+        return title, msg, duration, image, async_play, sound
 
     def _get_app_name(self) -> str:
         """
